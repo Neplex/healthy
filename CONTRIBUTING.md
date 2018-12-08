@@ -14,7 +14,7 @@ cd healthy
 git flow init -d
 ```
 
-Then, to add a feature:
+To add a feature, create a new issue describing the feature or choose to work on one existing by assign yourself to the feature. Then, create the feature in git:
 
 ```shell
 git flow feature start <your feature>
@@ -24,4 +24,4 @@ git commit -m "My beautifull work"
 git flow feature publish <your feature>
 ```
 
-You can do multiple commit before publishing. When you want to add your feature to the project, you need to go to GitHub and open a pull request to merge your feature into develop.
+You can do multiple commit before publishing. When you want to add your feature to the project, you need to go to GitHub and open a pull request to merge your feature into develop (don't forget to assign your feature issue to the pull request).
