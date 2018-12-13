@@ -1,0 +1,121 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title text-center>Ajouter votre structure</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding align-items-center>
+    <ion-item-divider>
+
+        <ion-grid no-padding>
+
+            <ion-row>
+                <ion-label text-center color="primary" float-left for="typeStructure">Type de structure</ion-label>
+            </ion-row>
+            <ion-row>
+                <ion-col></ion-col>
+                <ion-col>
+                    <ion-select [(ngModel)]="typeStructure" text-center name="typeStructure">
+                        <ion-select-option *ngFor="let struct of options" [value]="struct.name">{{struct.name}}</ion-select-option>
+                    </ion-select>
+                </ion-col>
+                <ion-col></ion-col>
+            </ion-row>
+
+            <form [formGroup]="structureForm" (ngSubmit)="onSubmit()">
+                <ion-row>
+                    <ion-label text-center color="primary" for="nomStructure">Nom de la structure</ion-label>
+                </ion-row>
+                <ion-row>
+                    <ion-input required text-center name="nomStructure" type="text"></ion-input>
+                </ion-row>
+                <ion-row>
+                    <ion-label required text-center color="primary" float-left for="descriptionStructure">Description de la structure</ion-label>
+                </ion-row>
+                <ion-row>
+                    <ion-input text-center name="descriptionStructure" type="text"></ion-input>
+                </ion-row>
+                <ion-row>
+                    <ion-label text-center color="primary" float-left for="telephoneStructure">Numéro de téléphone</ion-label>
+                </ion-row>
+                <ion-row>
+                    <ion-input text-center name="telephoneStructure" type="text"></ion-input>
+                </ion-row>
+
+                <ion-grid *ngIf="typeStructure=='Cabinet médical'">
+                    <ion-row>
+                        <ion-label text-center color="primary" for="specialite">Spécialité</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="specialite" type="text"></ion-input>
+                    </ion-row>
+                    <ion-row>
+                        <ion-label text-center color="primary" for="medecins">Médecins</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="medecins" type="text"></ion-input>
+                    </ion-row>
+                    <ion-row>
+                        <ion-label text-center color="primary" for="tailleCab">Taille</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input text-center name="tailleCab" type="text"></ion-input>
+                    </ion-row>
+                </ion-grid>
+
+                <ion-grid *ngIf="typeStructure=='Hôpital'">
+                    <ion-row>
+                        <ion-label text-center color="primary" for="nivMaternite">Niveau de maternité</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="nivMaternite" type="number"></ion-input>
+                    </ion-row>
+                    <ion-row>
+                        <ion-label text-center color="primary" for="services">Services</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="services" type="text"></ion-input>
+                    </ion-row>
+                </ion-grid>
+
+                <ion-grid *ngIf="typeStructure=='Salle de sport'">
+                    <ion-row>
+                        <ion-label text-center color="primary" for="tailleSalle">Taille de la salle</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="tailleSalle" type="text"></ion-input>
+                    </ion-row>
+                    <ion-row>
+                        <ion-label text-center color="primary" for="tarif">Tarif</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="tarif" type="text"></ion-input>
+                    </ion-row>
+                </ion-grid>
+
+                <ion-grid *ngIf="typeStructure=='Parcours de santé'">
+                    <ion-row>
+                        <ion-label text-center color="primary" for="distance">Distance</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="distance" type="text"></ion-input>
+                    </ion-row>
+                    <ion-row>
+                        <ion-label text-center color="primary" for="difficulte">Difficulté</ion-label>
+                    </ion-row>
+                    <ion-row>
+                        <ion-input required text-center name="difficulte" type="text"></ion-input>
+                    </ion-row>
+                </ion-grid>
+
+                <ion-row>
+                    <ion-col></ion-col>
+                    <ion-col>
+                        <ion-button expand="full" type="submit">Ajouter</ion-button>
+                    </ion-col>
+                    <ion-col></ion-col>
+                </ion-row>
+            </form>
+        </ion-grid>
+    </ion-item-divider>
+</ion-content>
