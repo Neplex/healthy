@@ -6,6 +6,9 @@ const routes: Routes = [
     {path: 'home', loadChildren: './home/home.module#HomePageModule'},
     {path: 'addStructure', loadChildren: './add-structure/add-structure.module#AddStructurePageModule'},
     {path: 'favorites', loadChildren: './favorites/favorites.module#FavoritesPageModule'},
+    {path: 'sign-in', loadChildren: './sign-in/sign-in.module#SignInPageModule'},
+    {path: 'sign-up', loadChildren: './sign-up/sign-up.module#SignUpPageModule'},
+    {path: 'sign-in-form', loadChildren: './sign-in-form/sign-in-form.module#SignInFormPageModule'}
 ];
 
 @NgModule({

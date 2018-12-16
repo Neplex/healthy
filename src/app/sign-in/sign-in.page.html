@@ -1,0 +1,53 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>
+            Connexion
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-button (click)="onGoToSignInForm()" expand="block">Sign in with my account</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-button expand="block" color="google">Sign in with Google</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-button expand="block" color="twitter">Sign in with Twitter</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-button (click)="onGoToSignUp()" fill="clear" expand="block">I don't have an account</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-button fill="clear" expand="block">I forgot my password</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+<ion-footer padding>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-button expand="block" >I don't want to sign in</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <small>(I can't access all the functionality of the app)</small>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>
+

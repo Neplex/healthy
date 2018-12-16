@@ -1,0 +1,60 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button icon-start (click)="onGoBack()" fill="clear">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Inscription</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-grid>
+        <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+            <ion-row>
+                <ion-col>
+                    <ion-label for="login">
+                        Login :
+                    </ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-input required name="login" type="text"></ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label for="password">
+                        Password :
+                    </ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-input required name="password" type="password"></ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label for="password2">
+                        Confirm password :
+                    </ion-label>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-input required name="password2" type="password"></ion-input>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col></ion-col>
+                <ion-col>
+                    <ion-button type="submit">Inscription</ion-button>
+                </ion-col>
+                <ion-col></ion-col>
+            </ion-row>
+        </form>
+    </ion-grid>
+</ion-content>
