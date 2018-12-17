@@ -1,0 +1,24 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title text-center>Favoris</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content no-padding>
+	<ion-grid no-padding>
+		<ion-list>
+			<ion-item-sliding *ngFor="let struct of favoris">
+				<ion-item>
+					<ion-label>{{struct.name}}</ion-label>
+					<ion-badge slot="end">{{struct.getType()}}</ion-badge>
+				</ion-item>
+				<ion-item-options side="start">
+					<ion-item-option color="danger" (click)="delete(struct)">
+						<ion-icon name="trash"></ion-icon>
+						Delete
+					</ion-item-option>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-list>
+	</ion-grid>
+</ion-content>

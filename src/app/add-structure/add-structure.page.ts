@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import {Cabinet} from '../Classes/Cabinet';
-import {Hopital} from '../Classes/Hopital';
-import {Parcours} from '../Classes/Parcours';
-import {Salle} from '../Classes/Salle';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {StructureType} from '../healthy-api/class/structure-type.enum';
+import {HealthyApiService} from '../healthy-api/healthy-api.service';
+import {MedicalOffice} from '../healthy-api/class/medical-office';
+import {Hospital} from '../healthy-api/class/hospital';
+import {FitnessTrail} from '../healthy-api/class/fitness-trail';
+import {Gym} from '../healthy-api/class/gym';
+import {NavController} from '@ionic/angular';
 
 @Component({
   selector: 'app-add-structure',
@@ -11,77 +14,48 @@ import {Salle} from '../Classes/Salle';
   styleUrls: ['./add-structure.page.scss'],
 })
 
-export class AddStructurePage implements OnInit {
+export class AddStructurePage implements OnInit, OnDestroy {
 
 
 	structureForm: FormGroup;
 
 	// Champs pour la création d'une structure
-
-	nomStructure: string;
-	telephoneStructure: number;
-	descriptionStructure: string;
+	sub;
 	typeStructure: string;
-	options: any[] = [
-		{key:'0', name:"Cabinet médical"},
-		{key:'1', name:"Hôpital"},
-		{key:'2', name:"Parcours de santé"},
-		{key:'3', name:"Salle de sport"}
-	];
+	structureType = StructureType;
+	structureTypeList = Object.values(StructureType);
 
-	// Champs pour un cabinet
-
-	specialite: string;
-	medecins: string;
-	tailleCab: string;
-
-	// Champs pour un hôpital
-
-	nivMaternite: number;
-	services: string;
-
-	// Champs pour un parcours
-
-	distance: string;
-	//geom: '',
-	difficulte: string;
-
-	// Champs pour une salle
-
-	tailleSalle: string;
-	tarif: string;
-
-
-	constructor(private formBuilder: FormBuilder) {}
+	constructor(private formBuilder: FormBuilder, private api: HealthyApiService, private nav: NavController) {
+		this.initForm();
+	}
 
 
 	ngOnInit(): void {
-		this.initForm();
+	}
+
+	ngOnDestroy(): void {
+		this.sub.unsubscribe();
 	}
 
 	initForm() {
 		this.structureForm = this.formBuilder.group({
-			nomStructure: '',
-			telephoneStructure:'',
-			descriptionStructure: '',
+			name: '',
+			phone: '',
+			description: '',
 
 			//cabinet
-			specialite: '',
+			specialities: '',
 			medecins: '',
-			tailleCab: '',
 
 			//hôpital
-			nivMaternite: '',
-			services: '',
+			maternity: false,
+			emergency: '',
 
 			//parcours
-			distance: '',
-			//geom: '',
-			difficulte: '',
+			difficulty: '',
 
 			//salle
-			tailleSalle: '',
-			tarif: ''
+			price: ''
 		})
 	}
 
@@ -89,48 +63,22 @@ export class AddStructurePage implements OnInit {
 		const formValue = this.structureForm.value;
 		let structure;
 		switch (this.typeStructure) {
-			case this.options[0].name:
-					structure = new Cabinet(
-					formValue['nomStructure'],
-					formValue['descriptionStructure'],
-					formValue['telephoneStructure'],
-					formValue['specialite'],
-					formValue['medecins'],
-					formValue['tailleCab']
-				);
+			case StructureType.MEDICAL_OFFICE:
+				structure = <MedicalOffice>formValue;
 				break;
-			case this.options[1].name:
-					structure = new Hopital(
-					formValue['nomStructure'],
-					formValue['descriptionStructure'],
-					formValue['telephoneStructure'],
-					formValue['nivMaternite'],
-					formValue['services']
-				);
+			case StructureType.HOSPITAL:
+				structure = <Hospital>formValue;
 				break;
-			case this.options[2].name:
-					structure = new Parcours(
-					formValue['nomStructure'],
-					formValue['descriptionStructure'],
-					formValue['telephoneStructure'],
-					formValue['distance'],
-					//formValue['geom'],
-					formValue['difficulte']
-				);
+			case StructureType.FITNESS_TRAIL:
+				structure = <FitnessTrail>formValue;
 				break;
-			case this.options[3].name:
-					structure = new Salle(
-					formValue['nomStructure'],
-					formValue['descriptionStructure'],
-					formValue['telephoneStructure'],
-					formValue['tailleSalle'],
-					formValue['tarif'],
-				);
+			case StructureType.GYM:
+				structure = <Gym>formValue;
 				break;
 			default:
 		}
 
-		// envoyer structure BD
+		this.sub = this.api.saveStructure(structure).subscribe(() => this.nav.navigateBack('/').then());
 
 	}
 }
