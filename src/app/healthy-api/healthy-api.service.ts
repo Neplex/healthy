@@ -181,7 +181,10 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
-    public getUserById(id: number): Observable<User> {
+    public getUserById(id?: number): Observable<User> {
+        if (!id) {
+            id = this.getTokenIdentity();
+        }
         return this.http.get(USERS_URL + '/' + id, this.getHttpOptions()).pipe(
             take(1),
             map(data => <User>data),
@@ -190,7 +193,11 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
-    public getUserStructuresAsGeoJSON(user: User | number): Observable<object> {
+    public getUserStructuresAsGeoJSON(user?: User | number): Observable<object> {
+        if (!user) {
+            user = this.getTokenIdentity();
+        }
+
         if (user instanceof User) {
             user = user.id;
         }
@@ -202,7 +209,7 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
-    public getUserStructures(user: User | number): Observable<AnyStructure[]> {
+    public getUserStructures(user?: User | number): Observable<AnyStructure[]> {
         return this.getUserStructuresAsGeoJSON(user).pipe(
             map(geo => HealthyApiService.featureCollectionToStructureList(geo)),
             publishReplay(1),
@@ -210,7 +217,11 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
-    public getUserFavoritesAsGeoJSON(user: User | number): Observable<object> {
+    public getUserFavoritesAsGeoJSON(user?: User | number): Observable<object> {
+        if (!user) {
+            user = this.getTokenIdentity();
+        }
+
         if (user instanceof User) {
             user = user.id;
         }
@@ -222,7 +233,7 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
-    public getUserFavorites(user: User | number): Observable<AnyStructure[]> {
+    public getUserFavorites(user?: User | number): Observable<AnyStructure[]> {
         return this.getUserFavoritesAsGeoJSON(user).pipe(
             map(geo => HealthyApiService.featureCollectionToStructureList(geo)),
             publishReplay(1),
@@ -247,11 +258,14 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
-    public deleteUserById(id: number): Observable<object> {
+    public deleteUserById(id?: number): Observable<object> {
+        if (!id) {
+            id = this.getTokenIdentity();
+        }
         return this.http.delete(USERS_URL + '/' + id, this.getHttpOptions());
     }
 
-    public deleteUser(user: User): Observable<object> {
+    public deleteUser(user?: User): Observable<object> {
         return this.deleteStructureById(user.id);
     }
 
@@ -275,5 +289,14 @@ export class HealthyApiService implements OnDestroy {
         }
 
         return {headers: headers};
+    }
+
+    private getTokenIdentity() {
+        try {
+            const decoded = JSON.parse(atob(this.token.split('.')[1]));
+            return decoded['identity'];
+        } catch (e) {
+            return null;
+        }
     }
 }
