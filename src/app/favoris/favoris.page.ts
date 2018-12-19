@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HealthyApiService} from '../healthy-api/healthy-api.service';
 import {Structure} from '../healthy-api/class/structure';
+import {AlertController} from '@ionic/angular';
 
 @Component({
 	selector: 'app-favoris',
@@ -9,11 +10,10 @@ import {Structure} from '../healthy-api/class/structure';
 })
 export class FavorisPage implements OnInit, OnDestroy {
 
-	structselect: any;
 	favoris;
 	sub;
 
-	constructor(private api: HealthyApiService) {
+	constructor(private api: HealthyApiService, private alert: AlertController) {
 	}
 
 	ngOnDestroy(): void {
@@ -31,13 +31,29 @@ export class FavorisPage implements OnInit, OnDestroy {
 					}
 					return res;
 				});
-
 			}); // TODO: change to favorites
 
 	}
 
-	delete(structure: Structure): void {
-		this.api.deleteStructure(structure);
+	async delete(structure: Structure): Promise<void> {
+		let confirm = await this.alert.create({
+			header: 'Confirm suppression',
+			message: 'You\'re about to delete this structure, are you sure ?',
+			buttons: [
+				{
+					text: 'Not anymore',
+					role: 'cancel',
+				}, {
+					text: 'I am',
+					handler: () => {
+						let del = this.api.deleteStructure(structure).subscribe(() => {
+							del.unsubscribe();
+						});
+					}
+				}
+			]
+		});
+		await confirm.present();
 	}
 
 }

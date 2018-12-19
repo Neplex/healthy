@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {StructureType} from '../healthy-api/class/structure-type.enum';
 import {HealthyApiService} from '../healthy-api/healthy-api.service';
 import {MedicalOffice} from '../healthy-api/class/medical-office';
@@ -9,9 +9,9 @@ import {Gym} from '../healthy-api/class/gym';
 import {NavController} from '@ionic/angular';
 
 @Component({
-  selector: 'app-add-structure',
-  templateUrl: './add-structure.page.html',
-  styleUrls: ['./add-structure.page.scss'],
+	selector: 'app-add-structure',
+	templateUrl: './add-structure.page.html',
+	styleUrls: ['./add-structure.page.scss'],
 })
 
 export class AddStructurePage implements OnInit, OnDestroy {
@@ -39,24 +39,39 @@ export class AddStructurePage implements OnInit, OnDestroy {
 
 	initForm() {
 		this.structureForm = this.formBuilder.group({
-			name: '',
-			phone: '',
-			description: '',
+			name: new FormControl('', {
+				validators: Validators.required,
+				updateOn: 'submit'
+			}),
+			phone: new FormControl('', {
+				validators: Validators.required,
+				updateOn: 'submit'
+			}),
+			description: new FormControl('', Validators.nullValidator),
 
 			//cabinet
-			specialities: '',
+			specialities: new FormControl('', {
+				validators: Validators.required,
+				updateOn: 'submit'
+			}),
 			medecins: '',
 
 			//hôpital
-			maternity: false,
-			emergency: '',
+			maternity: new FormControl(false, {
+				validators: Validators.required,
+				updateOn: 'submit'
+			}),
+			emergency: new FormControl(false, {
+				validators: Validators.required,
+				updateOn: 'submit'
+			}),
 
 			//parcours
 			difficulty: '',
 
 			//salle
 			price: ''
-		})
+		});
 	}
 
 	onSubmit() {
@@ -77,8 +92,6 @@ export class AddStructurePage implements OnInit, OnDestroy {
 				break;
 			default:
 		}
-
 		this.sub = this.api.saveStructure(structure).subscribe(() => this.nav.navigateBack('/').then());
-
 	}
 }

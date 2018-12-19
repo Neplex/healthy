@@ -7,6 +7,8 @@ import {IonicModule} from '@ionic/angular';
 
 import {FavorisPage} from './favoris.page';
 
+import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
+
 const routes: Routes = [
 	{
 		path: '',
@@ -22,7 +24,7 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 
 	],
-	declarations: [FavorisPage]
+	declarations: [FavorisPage, StructureTypeToStrPipe]
 })
 export class FavorisPageModule {
 }
