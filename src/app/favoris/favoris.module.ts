@@ -1,32 +1,30 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 
 import {IonicModule} from '@ionic/angular';
 
-import {AddStructurePage} from './add-structure.page';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FavorisPage} from './favoris.page';
 
 import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
 
 const routes: Routes = [
 	{
 		path: '',
-		component: AddStructurePage
+		component: FavorisPage
 	}
 ];
 
 @NgModule({
 	imports: [
 		CommonModule,
-		IonicModule,
 		FormsModule,
-		ReactiveFormsModule,
-		RouterModule.forChild(routes)
+		IonicModule,
+		RouterModule.forChild(routes),
+
 	],
-	declarations: [AddStructurePage, StructureTypeToStrPipe]
+	declarations: [FavorisPage, StructureTypeToStrPipe]
 })
-export class AddStructurePageModule {
-
-
+export class FavorisPageModule {
 }

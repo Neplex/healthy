@@ -8,6 +8,7 @@ import {StructureType} from './class/structure-type.enum';
 import {Hospital} from './class/hospital';
 import {FitnessTrail} from './class/fitness-trail';
 import {environment} from '../../environments/environment';
+import {Structure} from './class/structure';
 
 
 type AnyStructure = Hospital | FitnessTrail;
@@ -160,7 +161,7 @@ export class HealthyApiService implements OnDestroy {
         return this.http.delete(STRUCTURES_URL + '/' + id, this.getHttpOptions());
     }
 
-    public deleteStructure(structure: AnyStructure): Observable<object> {
+	public deleteStructure(structure: AnyStructure | Structure): Observable<object> {
         return this.deleteStructureById(structure.id);
     }
 
