@@ -9,12 +9,13 @@ const routes: Routes = [
     {path: 'sign-in', loadChildren: './sign-in/sign-in.module#SignInPageModule'},
     {path: 'sign-up', loadChildren: './sign-up/sign-up.module#SignUpPageModule'},
     {path: 'sign-in-form', loadChildren: './sign-in-form/sign-in-form.module#SignInFormPageModule'},
-    {path: 'map', loadChildren: './map/map.module#MapPageModule'}
+    {path: 'map', loadChildren: './map/map.module#MapPageModule'},
+	{path: 'structure_details/:id', loadChildren: './details/details.module#DetailsPageModule'}
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+	imports: [RouterModule.forRoot(routes)],
+	exports: [RouterModule]
 })
 export class AppRoutingModule {
 }

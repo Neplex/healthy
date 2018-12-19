@@ -1,0 +1,28 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<ion-buttons slot="end">
+			<ion-button (click)="">
+				<ion-icon *ngIf="isfav" name="heart"></ion-icon>
+				<ion-icon *ngIf="!isfav" name="heart-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+		<ion-title text-center>{{structure.structure_type | structureTypeToStr}} {{structure.name}}</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content no-padding>
+	<ion-grid no-margin no-padding *ngFor="let field of properties">
+		<ion-row no-margin no-padding>
+			<ion-col no-margin no-padding>
+				<ion-item color="primary">
+					<ion-label text-left> {{field}}</ion-label>
+				</ion-item>
+			</ion-col>
+			<ion-col no-margin no-padding>
+				<ion-item>
+					<ion-label text-center> {{structure[field]}} </ion-label>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-content>
