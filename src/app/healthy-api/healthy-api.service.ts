@@ -1,17 +1,20 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {concat, Observable} from 'rxjs';
 import {map, publishReplay, refCount, take} from 'rxjs/operators';
 
+import {environment} from '../../environments/environment';
 import {Bounds} from './class/bounds';
+import {Structure} from './class/structure';
 import {StructureType} from './class/structure-type.enum';
 import {Hospital} from './class/hospital';
 import {FitnessTrail} from './class/fitness-trail';
-import {environment} from '../../environments/environment';
-import {Structure} from './class/structure';
+import {MedicalOffice} from './class/medical-office';
+import {Gym} from './class/gym';
+import {User} from './class/user';
 
 
-type AnyStructure = Hospital | FitnessTrail;
+type AnyStructure = Hospital | FitnessTrail | MedicalOffice | Gym;
 
 const BASE_URL = environment.healthyApiUrl;
 const LOGIN_URL = BASE_URL + '/auth/login';
@@ -33,9 +36,10 @@ export class HealthyApiService implements OnDestroy {
     }
 
 
-    // UTIL //
+    // CONVERSIONS //
+    // TODO: store geometry in structures
 
-    private static geoToStructure(geo: object): AnyStructure {
+    private static featureToStructure(geo: object): AnyStructure {
         const geometry = geo['geometry'];
         const properties = geo['properties'];
         let structure: AnyStructure;
@@ -53,7 +57,7 @@ export class HealthyApiService implements OnDestroy {
         return structure;
     }
 
-    private static structureToGeo(structure: AnyStructure): object {
+    private static structureToFeature(structure: AnyStructure): object {
         return {
             type: 'Feature',
             geometry: {
@@ -64,25 +68,34 @@ export class HealthyApiService implements OnDestroy {
         };
     }
 
-    public isSignedIn(): boolean {
-        return this.token !== null;
+    private static featureCollectionToStructureList(geo: object): AnyStructure[] {
+        const features = geo['features'];
+        const data = [];
+
+        for (let i = 0; i < features.length; i++) {
+            data.push(HealthyApiService.featureToStructure(features[i]));
+        }
+
+        return data;
     }
 
 
     // AUTH //
 
     public signIn(username: string, password: string): Observable<void> {
-        if (this.isSignedIn()) {
-            this.signOut();
-        }
-
-        return this.http.post(LOGIN_URL, {'username': username, 'password': password}).pipe(
+        const signIn = this.http.post(LOGIN_URL, {'username': username, 'password': password}).pipe(
             take(1),
             map(payload => {
                 this.token = payload['token'];
                 return;
             })
         );
+
+        if (this.isSignedIn()) {
+            return concat(this.signOut(), signIn);
+        }
+
+        return signIn;
     }
 
     public signOut(): Observable<void> {
@@ -94,6 +107,8 @@ export class HealthyApiService implements OnDestroy {
             }));
     }
 
+    // STRUCTURES //
+
     public getAllStructuresAsGeoJSON(bounds?: Bounds): Observable<object> {
         return this.http.get(STRUCTURES_URL, this.getHttpOptions()).pipe(
             take(1),
@@ -102,21 +117,9 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
-
-    // STRUCTURES //
-
     public getAllStructures(bounds?: Bounds): Observable<AnyStructure[]> {
         return this.getAllStructuresAsGeoJSON(bounds).pipe(
-            map(geo => {
-                const features = geo['features'];
-                const data = [];
-
-                for (let i = 0; i < features.length; i++) {
-                    data.push(HealthyApiService.geoToStructure(features[i]));
-                }
-
-                return data;
-            }),
+            map(geo => HealthyApiService.featureCollectionToStructureList(geo)),
             publishReplay(1),
             refCount()
         );
@@ -132,21 +135,20 @@ export class HealthyApiService implements OnDestroy {
 
     public getStructureById(id: number): Observable<AnyStructure> {
         return this.getStructureByIdAsGeoJSON(id).pipe(
-            map(geo => HealthyApiService.geoToStructure(geo)),
+            map(geo => HealthyApiService.featureToStructure(geo)),
             publishReplay(1),
             refCount()
         );
     }
 
     public saveStructure(structure: Hospital): Observable<Hospital>;
-
     public saveStructure(structure: FitnessTrail): Observable<FitnessTrail>;
-
+    public saveStructure(structure: MedicalOffice): Observable<MedicalOffice>;
+    public saveStructure(structure: Gym): Observable<Gym>;
     public saveStructure(structure: AnyStructure): Observable<AnyStructure> {
-        const geo = HealthyApiService.structureToGeo(structure);
+        const geo = HealthyApiService.structureToFeature(structure);
         const options = this.getHttpOptions();
         let observable;
-        console.log(geo);
 
         if (structure.id) {
             observable = this.http.put(STRUCTURES_URL + '/' + structure.id, geo, options);
@@ -154,22 +156,114 @@ export class HealthyApiService implements OnDestroy {
             observable = this.http.post(STRUCTURES_URL, geo, options);
         }
 
-        return observable.pipe(map(geoResponse => HealthyApiService.geoToStructure(geoResponse)));
+        return observable.pipe(
+            take(1),
+            map(geoResponse => HealthyApiService.featureToStructure(geoResponse))
+        );
     }
 
     public deleteStructureById(id: number): Observable<object> {
         return this.http.delete(STRUCTURES_URL + '/' + id, this.getHttpOptions());
     }
 
-	public deleteStructure(structure: AnyStructure | Structure): Observable<object> {
+    public deleteStructure(structure: AnyStructure | Structure): Observable<object> {
         return this.deleteStructureById(structure.id);
+    }
+
+    // USERS //
+
+    public getAllUsers(): Observable<User[]> {
+        return this.http.get(USERS_URL, this.getHttpOptions()).pipe(
+            take(1),
+            map(data => <User[]>data),
+            publishReplay(1),
+            refCount()
+        );
+    }
+
+    public getUserById(id: number): Observable<User> {
+        return this.http.get(USERS_URL + '/' + id, this.getHttpOptions()).pipe(
+            take(1),
+            map(data => <User>data),
+            publishReplay(1),
+            refCount()
+        );
+    }
+
+    public getUserStructuresAsGeoJSON(user: User | number): Observable<object> {
+        if (user instanceof User) {
+            user = user.id;
+        }
+
+        return this.http.get(USERS_URL + '/' + user + '/structures', this.getHttpOptions()).pipe(
+            take(1),
+            publishReplay(1),
+            refCount()
+        );
+    }
+
+    public getUserStructures(user: User | number): Observable<AnyStructure[]> {
+        return this.getUserStructuresAsGeoJSON(user).pipe(
+            map(geo => HealthyApiService.featureCollectionToStructureList(geo)),
+            publishReplay(1),
+            refCount()
+        );
+    }
+
+    public getUserFavoritesAsGeoJSON(user: User | number): Observable<object> {
+        if (user instanceof User) {
+            user = user.id;
+        }
+
+        return this.http.get(USERS_URL + '/' + user + '/favorites', this.getHttpOptions()).pipe(
+            take(1),
+            publishReplay(1),
+            refCount()
+        );
+    }
+
+    public getUserFavorites(user: User | number): Observable<AnyStructure[]> {
+        return this.getUserFavoritesAsGeoJSON(user).pipe(
+            map(geo => HealthyApiService.featureCollectionToStructureList(geo)),
+            publishReplay(1),
+            refCount()
+        );
+    }
+
+    public saveUser(user: User): Observable<User> {
+        const data = <object>user;
+        const options = this.getHttpOptions();
+        let observable;
+
+        if (user.id) {
+            observable = this.http.put(USERS_URL + '/' + user.id, data, options);
+        } else {
+            observable = this.http.post(USERS_URL, data, options);
+        }
+
+        return observable.pipe(
+            take(1),
+            map(new_data => <User>new_data)
+        );
+    }
+
+    public deleteUserById(id: number): Observable<object> {
+        return this.http.delete(USERS_URL + '/' + id, this.getHttpOptions());
+    }
+
+    public deleteUser(user: User): Observable<object> {
+        return this.deleteStructureById(user.id);
+    }
+
+    // UTILS //
+
+    public isSignedIn(): boolean {
+        return this.token !== null;
     }
 
     ngOnDestroy(): void {
         this.signOut();
     }
-
-    // USERS //
 
     private getHttpOptions() {
         const headers = new HttpHeaders({
