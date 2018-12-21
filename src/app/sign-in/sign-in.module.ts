@@ -1,10 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {IonicModule} from '@ionic/angular';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 
 import {SignInPage} from './sign-in.page';
+import {SignUpPage} from '../sign-up/sign-up.page';
+import {SignInFormPage} from '../sign-in-form/sign-in-form.page';
 
 @NgModule({
     imports: [
@@ -16,9 +18,18 @@ import {SignInPage} from './sign-in.page';
                 path: '',
                 component: SignInPage
             }
-        ])
+        ]),
+        ReactiveFormsModule
     ],
-    declarations: [SignInPage]
+    entryComponents: [
+        SignUpPage,
+        SignInFormPage
+    ],
+    declarations: [
+        SignInPage,
+        SignUpPage,
+        SignInFormPage
+    ]
 })
 export class SignInPageModule {
 }

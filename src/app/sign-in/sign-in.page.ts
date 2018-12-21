@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
-import {NavController} from '@ionic/angular';
+import {ModalController, NavController} from '@ionic/angular';
+import {SignUpPage} from '../sign-up/sign-up.page';
+import {SignInFormPage} from '../sign-in-form/sign-in-form.page';
 
 @Component({
     selector: 'app-sign-in',
@@ -7,14 +9,24 @@ import {NavController} from '@ionic/angular';
     styleUrls: ['sign-in.page.scss'],
 })
 export class SignInPage {
-    constructor(private navCtrl: NavController) {
+    constructor(private navCtrl: NavController, private modalCtrl: ModalController) {
     }
 
-    public onGoToSignUp() {
-        this.navCtrl.navigateForward('sign-up').then();
+    async onGoToSignUp() {
+        const modal = await this.modalCtrl.create({
+            component: SignUpPage
+        });
+        return await modal.present();
     }
 
-    public onGoToSignInForm() {
-        this.navCtrl.navigateForward('sign-in-form').then();
+    async onGoToSignInForm() {
+        const modal = await this.modalCtrl.create({
+            component: SignInFormPage
+        });
+        return await modal.present();
+    }
+
+    public onGoToMap() {
+        this.navCtrl.navigateForward('home').then();
     }
 }

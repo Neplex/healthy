@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController} from '@ionic/angular';
+import {ModalController, NavController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from '../Classes/User';
+import {HealthyApiService} from '../healthy-api/healthy-api.service';
+import {Test} from '../Classes/Test';
+
+// import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-sign-in-form',
@@ -15,8 +19,16 @@ export class SignInFormPage implements OnInit {
     login: string;
     password: string;
     user: User;
+    test: Test;
 
-    constructor(private navCtrl: NavController, private formBuilder: FormBuilder) {
+    // sub: Subscription;
+
+    constructor(private navCtrl: NavController,
+                private modalCtrl: ModalController,
+                private formBuilder: FormBuilder,
+                private api: HealthyApiService) {
+        this.test = new Test();
+        this.user = new User('', '');
     }
 
     public ngOnInit(): void {
@@ -25,23 +37,40 @@ export class SignInFormPage implements OnInit {
 
     initForm() {
         this.signInForm = this.formBuilder.group({
-                login: ['', Validators.required],
-                password: ['', Validators.required]
+                login: '',
+                password: ''
             }
         );
     }
 
     onSubmit() {
         const value = this.signInForm.value;
-        this.user = new User(value['login'], value['password']);
-        console.log('user : ' + this.user.login, +' ' + this.user.password);
+        let log;
+        log = value['login'];
+        let pwd;
+        pwd = value['password']
+        this.user = new User(log, pwd);
+        console.log('user : ' + log, +' password : ' + pwd);
+        console.log('user : ' + this.user.login, +' password : ' + this.user.password);
         // check user
         // if ok then sign in
         // else error pop-up
+        // this.sub = this.api.signIn(this.user.login, this.user.password).subscribe(() => {
+
+        // });
+        if (this.test.loginCheck(this.user)) {
+            this.onGoToMap();
+        } else {
+            console.log('Erreur sign in !');
+        }
     }
 
-    public onGoBack() {
-        this.navCtrl.navigateBack('sign-in').then();
+    async onGoBack() {
+        await this.modalCtrl.dismiss();
+    }
+
+    public onGoToMap() {
+        this.navCtrl.navigateForward('map').then();
     }
 
 }

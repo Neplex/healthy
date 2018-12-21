@@ -12,13 +12,9 @@
             <ion-col>
                 <ion-button (click)="onGoToSignInForm()" expand="block">Sign in with my account</ion-button>
             </ion-col>
-        </ion-row>
-        <ion-row>
             <ion-col>
                 <ion-button expand="block" color="google">Sign in with Google</ion-button>
             </ion-col>
-        </ion-row>
-        <ion-row>
             <ion-col>
                 <ion-button expand="block" color="twitter">Sign in with Twitter</ion-button>
             </ion-col>
@@ -27,8 +23,6 @@
             <ion-col>
                 <ion-button (click)="onGoToSignUp()" fill="clear" expand="block">I don't have an account</ion-button>
             </ion-col>
-        </ion-row>
-        <ion-row>
             <ion-col>
                 <ion-button fill="clear" expand="block">I forgot my password</ion-button>
             </ion-col>
@@ -40,7 +34,7 @@
     <ion-grid>
         <ion-row>
             <ion-col>
-                <ion-button expand="block" >I don't want to sign in</ion-button>
+                <ion-button expand="block" (click)="onGoToMap()">I don't want to sign in</ion-button>
             </ion-col>
         </ion-row>
         <ion-row>
