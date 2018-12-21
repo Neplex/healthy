@@ -258,6 +258,24 @@ export class HealthyApiService implements OnDestroy {
         );
     }
 
+    public addUserFavoriteById(favorite_id: number, user_id?: number): Observable<void> {
+        if (!user_id) {
+            user_id = this.getTokenIdentity();
+        }
+
+        return this.http.post(USERS_URL + '/' + user_id + '/favorites', {
+            'structure_id': favorite_id
+        }, this.getHttpOptions()).pipe(
+            map(() => {
+                return;
+            })
+        );
+    }
+
+    public addUserFavorite(favorite: AnyStructure, user_id?: number): Observable<void> {
+        return this.addUserFavoriteById(favorite.id, user_id);
+    }
+
     public deleteUserById(id?: number): Observable<object> {
         if (!id) {
             id = this.getTokenIdentity();
@@ -267,6 +285,22 @@ export class HealthyApiService implements OnDestroy {
 
     public deleteUser(user?: User): Observable<object> {
         return this.deleteStructureById(user.id);
+    }
+
+    public deleteUserFavoriteById(favorite_id: number, user_id?: number): Observable<void> {
+        if (!user_id) {
+            user_id = this.getTokenIdentity();
+        }
+
+        return this.http.delete(USERS_URL + '/' + user_id + '/favorites/' + favorite_id,
+            this.getHttpOptions()).pipe(map(() => {
+                return;
+            })
+        );
+    }
+
+    public deleteUserFavorite(favorite: AnyStructure, user_id?: number): Observable<void> {
+        return this.deleteUserFavoriteById(favorite.id, user_id);
     }
 
     // UTILS //
