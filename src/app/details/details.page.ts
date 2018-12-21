@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {HealthyApiService} from '../healthy-api/healthy-api.service';
-import {Structure} from '../healthy-api/class/structure';
+import {AnyStructure, HealthyApiService} from '../healthy-api/healthy-api.service';
 import {AlertController} from '@ionic/angular';
 
 @Component({
@@ -39,7 +38,7 @@ export class DetailsPage implements OnInit, OnDestroy {
 		this.subProp.unsubscribe();
 	}
 
-	async popUp(structure: Structure): Promise<void> {
+	async popUp(structure: AnyStructure): Promise<void> {
 		const alerte = await this.alert.create({
 			header: 'Already in your Fav',
 			message: 'Do you want to remove this structure from your favorites ?',
@@ -50,9 +49,9 @@ export class DetailsPage implements OnInit, OnDestroy {
 				}, {
 					text: 'Yes',
 					handler: () => {
-						/*	const del = this.api. TODO: remove favorite(structure).subscribe(() => {
+						const del = this.api.deleteUserFavorite(structure).subscribe(() => {
 								del.unsubscribe();
-							});*/
+						});
 					}
 				}
 			]
@@ -65,7 +64,9 @@ export class DetailsPage implements OnInit, OnDestroy {
 		if (this.isfav) {
 			this.popUp(this.structure).then();
 		} else {
-			// TODO: add favorite
+			const del = this.api.addUserFavorite(this.structure).subscribe(() => {
+				del.unsubscribe();
+			});
 		}
 	}
 }

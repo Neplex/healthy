@@ -14,7 +14,7 @@ import {Gym} from './class/gym';
 import {User} from './class/user';
 
 
-type AnyStructure = Hospital | FitnessTrail | MedicalOffice | Gym;
+export type AnyStructure = Hospital | FitnessTrail | MedicalOffice | Gym;
 
 const BASE_URL = environment.healthyApiUrl;
 const LOGIN_URL = BASE_URL + '/auth/login';
