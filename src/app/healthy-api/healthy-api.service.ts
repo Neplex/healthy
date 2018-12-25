@@ -37,7 +37,6 @@ export class HealthyApiService implements OnDestroy {
 
 
     // CONVERSIONS //
-    // TODO: store geometry in structures
 
     private static featureToStructure(geo: object): AnyStructure {
         const geometry = geo['geometry'];
@@ -54,6 +53,9 @@ export class HealthyApiService implements OnDestroy {
                 break;
         }
 
+        structure.lat = geometry.coordinates[0];
+        structure.lng = geometry.coordinates[1];
+
         return structure;
     }
 
@@ -62,7 +64,7 @@ export class HealthyApiService implements OnDestroy {
             type: 'Feature',
             geometry: {
                 type: 'Point',
-                coordinates: [0, 0]
+                coordinates: [structure.lat, structure.lng]
             },
             properties: <object>structure
         };
