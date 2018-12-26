@@ -1,68 +1,92 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalController, NavController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {User} from '../Classes/User';
-import {Test} from '../Classes/Test';
+
+import {Subscription} from 'rxjs';
+
+import {HealthyApiService} from '../healthy-api/healthy-api.service';
+import {User} from '../healthy-api/class/user';
 
 @Component({
     selector: 'app-sign-up',
     templateUrl: './sign-up.page.html',
     styleUrls: ['./sign-up.page.scss'],
 })
-export class SignUpPage implements OnInit {
+export class SignUpPage implements OnInit, OnDestroy {
 
-    signInForm: FormGroup;
+    form: FormGroup;
+    subscription: Subscription;
 
-    login: string;
-    password: string;
-    user: User;
-    test: Test;
+    constructor(
+        private navCtrl: NavController,
+        private modalCtrl: ModalController,
+        private formBuilder: FormBuilder,
+        private api: HealthyApiService
+    ) {
+    }
 
-    constructor(private navCtrl: NavController, private modalCtrl: ModalController, private formBuilder: FormBuilder) {
-        this.user = new User('', '');
-        this.test = new Test();
+    private static passwordCheck(group: FormGroup) {
+        const password = group.controls['password'].value;
+        const passwordCheck = group.controls['passwordCheck'].value;
+
+        if (password === passwordCheck) {
+            return null;
+        }
+
+        return {passwordCheck: true};
     }
 
     public ngOnInit(): void {
-        this.initForm();
+        // TODO: display errors in form
+        this.form = this.formBuilder.group({
+            username: this.formBuilder.control(
+                '',
+                Validators.compose([Validators.required, Validators.minLength(6)])
+            ),
+            passwords: this.formBuilder.group({
+                password: this.formBuilder.control(
+                    '',
+                    Validators.compose([Validators.required, Validators.minLength(6)])
+                ),
+                passwordCheck: this.formBuilder.control(
+                    '',
+                    Validators.compose([Validators.required, Validators.minLength(6)])
+                )
+            }, {validator: this.passwordCheck})
+        });
     }
 
-    initForm() {
-        this.signInForm = this.formBuilder.group({
-                login: '',
-                password: ''
-            }
-        );
-    }
-
-    onSubmit() {
-        const value = this.signInForm.value;
-        let log;
-        let pwd2;
-        let pwd1;
-        log = value['login'];
-        pwd1 = value['password1'];
-        pwd2 = value['password2'];
-        if (pwd1 === pwd2) {
-            this.user = new User(log, pwd1);
-            console.log('user : ' + log + ' password1 : ' + pwd1 + ' password2 : ' + pwd2);
-            console.log('user : ' + this.user.login, +' password : ' + this.user.password);
-            if (!this.test.loginCheck(this.user)) {
-                this.test.addUser(this.user);
-                this.onGoToMap();
-            } else {
-                console.log('Erreur sign up !');
-            }
-        } else {
-            console.log('Erreur password !');
+    ngOnDestroy(): void {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
         }
     }
 
-    async onGoBack() {
-        await this.modalCtrl.dismiss();
+    onSubmit() {
+        if (this.form.valid) {
+            const newUser = new User();
+            newUser.username = this.form.value.username;
+            newUser.password = this.form.value.passwords.password;
+
+            this.subscription = this.api.saveUser(newUser).subscribe(
+                (user) => this.onSuccess(user),
+                (error) => this.onFail(error)
+            );
+        } else {
+            console.error(this.form.controls.username.errors);
+        }
     }
 
-    public onGoToMap() {
-        this.navCtrl.navigateForward('map').then();
+    public goBack() {
+        this.modalCtrl.dismiss().then();
+    }
+
+    public onSuccess(user: User) {
+        this.goBack();
+    }
+
+    public onFail(error) {
+        console.error(error);
+        // TODO: display error in form
     }
 }

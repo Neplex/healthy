@@ -9,24 +9,27 @@ import {SignInFormPage} from '../sign-in-form/sign-in-form.page';
     styleUrls: ['sign-in.page.scss'],
 })
 export class SignInPage {
+
     constructor(private navCtrl: NavController, private modalCtrl: ModalController) {
     }
 
-    async onGoToSignUp() {
-        const modal = await this.modalCtrl.create({
+    public goToSignUp() {
+        this.modalCtrl.create({
             component: SignUpPage
+        }).then((modal) => {
+            modal.present().then();
         });
-        return await modal.present();
     }
 
-    async onGoToSignInForm() {
-        const modal = await this.modalCtrl.create({
+    public goToSignInForm() {
+        this.modalCtrl.create({
             component: SignInFormPage
+        }).then((modal) => {
+            modal.present().then();
         });
-        return await modal.present();
     }
 
-    public onGoToMap() {
-        this.navCtrl.navigateForward('home').then();
+    public goToMap() {
+        this.navCtrl.navigateRoot('map').then();
     }
 }
