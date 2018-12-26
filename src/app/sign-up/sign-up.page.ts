@@ -52,7 +52,7 @@ export class SignUpPage implements OnInit, OnDestroy {
                     '',
                     Validators.compose([Validators.required, Validators.minLength(6)])
                 )
-            }, {validator: this.passwordCheck})
+            }, {validator: SignUpPage.passwordCheck})
         });
     }
 
