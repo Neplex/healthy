@@ -16,6 +16,11 @@ import {User} from './class/user';
 
 export type AnyStructure = Hospital | FitnessTrail | MedicalOffice | Gym;
 
+interface GetStructuresOptions {
+    bounds?: Bounds | number[];
+    query?: string;
+}
+
 const BASE_URL = environment.healthyApiUrl;
 const LOGIN_URL = BASE_URL + '/auth/login';
 const LOGOUT_URL = BASE_URL + '/auth/logout';
@@ -111,32 +116,41 @@ export class HealthyApiService implements OnDestroy {
 
     // STRUCTURES //
 
-    public getAllStructuresAsGeoJSON(bounds?: Bounds): Observable<object> {
-        return this.http.get(STRUCTURES_URL, this.getHttpOptions()).pipe(
+    public getAllStructuresAsGeoJSON(options?: GetStructuresOptions): Observable<object> {
+        if (options && options.bounds instanceof Bounds) {
+            options.bounds = [
+                options.bounds.min_lat,
+                options.bounds.min_lng,
+                options.bounds.max_lat,
+                options.bounds.max_lng
+            ];
+        }
+
+        return this.http.get(STRUCTURES_URL, this.getHttpOptions(options)).pipe(
             take(1),
             publishReplay(1),
             refCount()
         );
     }
 
-    public getAllStructures(bounds?: Bounds): Observable<AnyStructure[]> {
-        return this.getAllStructuresAsGeoJSON(bounds).pipe(
+    public getAllStructures(options?: GetStructuresOptions): Observable<AnyStructure[]> {
+        return this.getAllStructuresAsGeoJSON(options).pipe(
             map(geo => HealthyApiService.featureCollectionToStructureList(geo)),
             publishReplay(1),
             refCount()
         );
     }
 
-    public getStructureByIdAsGeoJSON(id: number): Observable<object> {
-        return this.http.get(STRUCTURES_URL + '/' + id, this.getHttpOptions()).pipe(
+    public getStructureByIdAsGeoJSON(id: number, target?: number[]): Observable<object> {
+        return this.http.get(STRUCTURES_URL + '/' + id, this.getHttpOptions({distanceFrom: target})).pipe(
             take(1),
             publishReplay(1),
             refCount()
         );
     }
 
-    public getStructureById(id: number): Observable<AnyStructure> {
-        return this.getStructureByIdAsGeoJSON(id).pipe(
+    public getStructureById(id: number, target?: number[]): Observable<AnyStructure> {
+        return this.getStructureByIdAsGeoJSON(id, target).pipe(
             map(geo => HealthyApiService.featureToStructure(geo)),
             publishReplay(1),
             refCount()
@@ -315,7 +329,9 @@ export class HealthyApiService implements OnDestroy {
         this.signOut();
     }
 
-    private getHttpOptions() {
+    private getHttpOptions(): { headers };
+    private getHttpOptions(params: object): { headers, params };
+    private getHttpOptions(params?: object) {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });
@@ -324,7 +340,7 @@ export class HealthyApiService implements OnDestroy {
             headers.set('Authorization', this.token);
         }
 
-        return {headers: headers};
+        return params ? {headers: headers, params: params} : {headers: headers};
     }
 
     private getTokenIdentity() {
