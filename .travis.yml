@@ -1,0 +1,55 @@
+sudo:                 true
+language:             node_js
+node_js:              node
+addons:
+  apt:
+    packages:
+      - npm
+before_script:
+  - ng lint
+install:
+  - npm install
+  - npm install -g @angular/cli
+  - npm install -g ionic
+matrix:
+  include:
+    # Web deploy to heroku
+    - language:       node_js
+      script:
+        - echo "Ready to deploy"
+      deploy:
+        provider:     heroku
+        api_key:
+          secure:     d5fhWF58MpK6itesFHdHUI5ksF7uBBLgYNa0dHRC0BeQ0DkLJtcVcZszf0FObpUPMkRnBbwF8X/m/CeDJWKemzcoTErxr8VRAsCiYom10f2rW3NZd14Hy83rtB0CPltt91xU42OHf8UyVkavob7eVkFDGE34xwzi+QUCjnNS8OYYARLjZA5CRqpPyGukZ7/7PMDtNRTumc2H/E5OciHt31geZvQx83dfGtGW/L+QXJexmZZXKkwof2D750jrfJj547suOYTpDOUJWVX1SWL8McbutGOwmUNi2GXzsQSuYUwxzqWcNybZns09jnkH3B5FkIbRc5zSSU19KUKYFIGhewSpPwVbWCrKLFfYufsJFX7HjhoSSLMgU9n1H5nC/5hAyes1C0RcZImjHPZ9lrD1jq5JoJb9lebDrbR2PU6xkvL1ax5uvWRC3aWqU2ga515BRZTEAAsxkIFcch8p998yZijWYry+Ymnpq6g5swGNbjbpX4ba0U9ng1Hmlv+BXlxiZjfWq/7U9qmFeU2T90OQdjq8LeROlSBkJE+eQP3WVY+keunIp3Y464daZVUcM8LuJ6pzkPtdz+AViuHBlJFVDNr6l93NxNSMTaSsCrWLUFVfz5QKWvGMh3yYwL0SRx+nBOdpEtZe2zZj6jodNVVah9M3rmw0kuoyLc5CfTD8Ajo=
+        app:          healthy
+        on:
+          branch:     master
+
+    # Android deploy to GitHub release
+    - language:       android
+      android:
+        components:
+          - build-tools-27.0.3
+          - android-22
+          - add-on
+          - extra
+        licenses:
+          - android-sdk-preview-license-52d11cd2
+          - android-sdk-license-.+
+          - google-gdk-license-.+
+      before_install:
+        - nvm install node
+      script:
+        - ionic cordova prepare android
+        - ionic cordova build android --prod --release
+        - echo "Ready to deploy"
+      deploy:
+        provider:     releases
+        api_key:
+          secure:     nKTgKdvI7SyTM5MpShEQcjLXzVCTbTH4stCbU6LHas0MAZoPV/gzjk3BIAO5MQffvOKfD6SNGVvq/wikxWNNNY3w67y/pVdexqbJOXuGVxCCEaPfXIPez2M34ub1tUAf/W5etMw+dvRAZAiiF1nxRuXnu4qUBZcOkI8Qzoia/Drs4CWHjnMCZDcraRnAQ2SIwzH3zFpzDMdR7rwxEK6Xa9NgInxaHxsLW/pfjaBUjVb1yxbvPz0GYmahpiNj42h62RUYhzzyEMcq9tQ6Zat8UbgNVf6A0uqYhamgXTVFMiwVjZVuWnkBrqRxpn52kyxXfV52Vz0qxpx2u0FDm59akggcvH7l65W9fQBV6PUL3FN1SBoH1EYzgEmRJrLO3qQt+/A38UhW6tIITttClHlyLT/x3L/ZWJUHPrJLMa1wyJRkWqYR4LZ/cakObUSlfPg/jpXhhdQXrkdZxQ2Q8clYsoKyi6mkRu39KGx+epHw5bHHi1tPVmviJgVCSOSMyLkIRO6wS2SixfdCl5JK/Td27w118A4lmQqf2OyxpypIH2JNFhfta9qgZgatjZhvAVc+C2GpFUNr262zQCSIW4OA8D6tn2FI/VkRYB69sue6+vaAHj/hR6PlXUK3w29AMZxBPAf0C2qLUU+2CY7QtKa0stUAxz1P4Ys0eD3ScnMApLs=
+        file:         healthy.apk
+        skip_cleanup: true
+        on:
+          tags:       true
+          branch:     master
+          repo:       Neplex/healthy
