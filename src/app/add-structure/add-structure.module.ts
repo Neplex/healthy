@@ -10,21 +10,21 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
 
 const routes: Routes = [
-	{
-		path: '',
-		component: AddStructurePage
-	}
+    {
+        path: '',
+        component: AddStructurePage
+    }
 ];
 
 @NgModule({
-	imports: [
-		CommonModule,
-		IonicModule,
-		FormsModule,
-		ReactiveFormsModule,
-		RouterModule.forChild(routes)
-	],
-	declarations: [AddStructurePage, StructureTypeToStrPipe]
+    imports: [
+        CommonModule,
+        IonicModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(routes)
+    ],
+    declarations: [AddStructurePage, StructureTypeToStrPipe]
 })
 export class AddStructurePageModule {
 
