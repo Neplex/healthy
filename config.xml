@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="fr.univ-orleans.imis.healthy" version="0.0.1" xmlns="http://www.w3.org/ns/widgets">
+<widget id="fr.orleans.Healthy" version="0.0.1" xmlns="http://www.w3.org/ns/widgets">
     <name>Healthy</name>
     <description>Helps you find health structures.</description>
     <author email="clement.baccon@etu.univ-orleans.fr" href="https://github.com/ClementBaccon">Clément Baccon</author>
@@ -88,8 +88,8 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2"/>
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0"/>
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5"/>
-    <engine name="android" spec="7.1.4"/>
     <plugin name="cordova-plugin-geolocation" spec="4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="We need your location to offer structures close to you."/>
     </plugin>
+    <engine name="android" spec="7.1.4"/>
 </widget>
