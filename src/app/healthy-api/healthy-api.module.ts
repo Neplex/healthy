@@ -3,14 +3,16 @@ import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 
 import {HealthyApiService} from './healthy-api.service';
+import {StructureTypeToStrPipe} from './structure-type-to-str.pipe';
 
 @NgModule({
-    declarations: [],
+    declarations: [StructureTypeToStrPipe],
     imports: [
         CommonModule,
         HttpClientModule
     ],
-    providers: [HealthyApiService]
+    providers: [HealthyApiService],
+    exports: [StructureTypeToStrPipe]
 })
 export class HealthyApiModule {
 }

@@ -6,7 +6,7 @@ import {MedicalOffice} from '../healthy-api/class/medical-office';
 import {Hospital} from '../healthy-api/class/hospital';
 import {FitnessTrail} from '../healthy-api/class/fitness-trail';
 import {Gym} from '../healthy-api/class/gym';
-import {NavController} from '@ionic/angular';
+import {NavController, NavParams} from '@ionic/angular';
 
 @Component({
     selector: 'app-add-structure',
@@ -16,16 +16,15 @@ import {NavController} from '@ionic/angular';
 
 export class AddStructurePage implements OnInit, OnDestroy {
 
-
+    coord = this.navp.get('data');
     structureForm: FormGroup;
-
     // Champs pour la création d'une structure
     sub;
     typeStructure: string;
     structureType = StructureType;
     structureTypeList = Object.values(StructureType);
 
-    constructor(private formBuilder: FormBuilder, private api: HealthyApiService, private nav: NavController) {
+    constructor(private formBuilder: FormBuilder, private api: HealthyApiService, private nav: NavController, private navp: NavParams) {
         this.initForm();
     }
 
@@ -92,6 +91,6 @@ export class AddStructurePage implements OnInit, OnDestroy {
                 break;
             default:
         }
-        this.sub = this.api.saveStructure(structure).subscribe(() => this.nav.navigateBack('/').then());
+        this.sub = this.api.saveStructure(structure).subscribe(() => this.nav.goBack());
     }
 }

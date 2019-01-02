@@ -6,7 +6,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {IonicModule} from '@ionic/angular';
 
 import {FavoritesPage} from './favorites.page';
-import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
+import {HealthyApiModule} from '../healthy-api/healthy-api.module';
 
 const routes: Routes = [
     {
@@ -20,10 +20,11 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         IonicModule,
+        HealthyApiModule,
         RouterModule.forChild(routes),
 
     ],
-    declarations: [FavoritesPage, StructureTypeToStrPipe]
+    declarations: [FavoritesPage]
 })
 export class FavoritesPageModule {
 }

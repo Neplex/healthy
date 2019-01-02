@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {StructureType} from './healthy-api/class/structure-type.enum';
-import {Structure} from './healthy-api/class/structure';
+import {Structure} from './class/structure';
+import {StructureType} from './class/structure-type.enum';
 
 @Pipe({
     name: 'structureTypeToStr'

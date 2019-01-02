@@ -15,9 +15,6 @@ const routes: Routes = [
                 path: 'favorites',
                 loadChildren: '../favorites/favorites.module#FavoritesPageModule'
             }, {
-                path: 'add-structure',
-                loadChildren: '../add-structure/add-structure.module#AddStructurePageModule'
-            }, {
                 path: 'settings',
                 loadChildren: '../settings/settings.module#SettingsPageModule'
             }

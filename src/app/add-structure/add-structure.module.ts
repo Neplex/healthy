@@ -6,8 +6,7 @@ import {IonicModule} from '@ionic/angular';
 
 import {AddStructurePage} from './add-structure.page';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-
-import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
+import {HealthyApiModule} from '../healthy-api/healthy-api.module';
 
 const routes: Routes = [
     {
@@ -17,14 +16,15 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [
-        CommonModule,
-        IonicModule,
-        FormsModule,
-        ReactiveFormsModule,
-        RouterModule.forChild(routes)
-    ],
-    declarations: [AddStructurePage, StructureTypeToStrPipe]
+	imports: [
+		CommonModule,
+		IonicModule,
+		FormsModule,
+		ReactiveFormsModule,
+		HealthyApiModule,
+		RouterModule.forChild(routes)
+	],
+	declarations: [AddStructurePage]
 })
 export class AddStructurePageModule {
 
