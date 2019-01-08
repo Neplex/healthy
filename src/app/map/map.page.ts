@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {toLonLat} from 'ol/proj';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -10,7 +11,8 @@ import GeoJSON from 'ol/format/GeoJSON';
 import BaseLayer from 'ol/layer/Base';
 import {HealthyApiService} from '../healthy-api/healthy-api.service';
 import {Subscription} from 'rxjs';
-import {NavController} from '@ionic/angular';
+import {ModalController} from '@ionic/angular';
+import {AddStructurePage} from '../add-structure/add-structure.page';
 
 @Component({
     selector: 'app-map',
@@ -24,13 +26,18 @@ export class MapPage implements OnInit, OnDestroy {
     sub: Subscription;
     geolocation;
 
-    constructor(private api: HealthyApiService, private nav: NavController) {
+    constructor(private api: HealthyApiService, private modalCtrl: ModalController) {
     }
 
     ngOnInit() {
+
         this.geolocation = new Geolocation({
             tracking: true
         });
+
+        this.layersMap.push(new TileLayer({
+            source: new OSM()
+        }));
 
         this.layersMap.push(new TileLayer({
             source: new OSM()
@@ -45,8 +52,14 @@ export class MapPage implements OnInit, OnDestroy {
             })
         });
 
-        this.geolocation.on('change:position', function () {
-            let p = this.geolocation.getPosition();
+        this.map.on('dblclick', (e) => {
+            let coordinates = toLonLat(e.coordinate);
+            this.modalCtrl.create({
+                component: AddStructurePage,
+                componentProps: {coordinates: coordinates}
+            }).then((modal) => {
+                modal.present().then();
+            });
         });
 
         this.map.on('singleclick', function (e) {
@@ -69,8 +82,12 @@ export class MapPage implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
-        this.sub.unsubscribe();
+    creaMap(l: object) {
+        this.layersMap.push(new VectorLayer({
+            source: new VectorSource({
+                features: (new GeoJSON()).readFeatures(l)
+            }),
+        }));
     }
 
     creaMap(l: object) {

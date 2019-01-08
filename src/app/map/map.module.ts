@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
-
 import {IonicModule} from '@ionic/angular';
-
 import {MapPage} from './map.page';
+import {AddStructurePage} from '../add-structure/add-structure.page';
+import {HealthyApiModule} from '../healthy-api/healthy-api.module';
 
 const routes: Routes = [
     {
@@ -18,10 +18,18 @@ const routes: Routes = [
     imports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         IonicModule,
-        RouterModule.forChild(routes)
+        HealthyApiModule,
+        RouterModule.forChild(routes),
     ],
-    declarations: [MapPage]
+    entryComponents: [
+        AddStructurePage
+    ],
+    declarations: [
+        AddStructurePage,
+        MapPage
+    ]
 })
 export class MapPageModule {
 }
