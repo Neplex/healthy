@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalController, NavController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Toast} from '@ionic-native/toast/ngx';
 
 import {Subscription} from 'rxjs';
 
@@ -21,7 +22,8 @@ export class SignUpPage implements OnInit, OnDestroy {
         private navCtrl: NavController,
         private modalCtrl: ModalController,
         private formBuilder: FormBuilder,
-        private api: HealthyApiService
+        private api: HealthyApiService,
+        private toast: Toast
     ) {
     }
 
@@ -65,6 +67,7 @@ export class SignUpPage implements OnInit, OnDestroy {
     onSubmit() {
         if (this.form.valid) {
             const newUser = new User();
+
             newUser.username = this.form.value.username;
             newUser.password = this.form.value.passwords.password;
 
@@ -83,10 +86,14 @@ export class SignUpPage implements OnInit, OnDestroy {
 
     public onSuccess(user: User) {
         this.goBack();
+        this.toast.showShortCenter('Bienvenue ' + user.username + ' !\n' +
+            'Vous êtes maintenant invité(e) à vous connecter !').subscribe(toast => {
+            console.log(toast);
+        });
     }
 
     public onFail(error) {
         console.error(error);
-        // TODO: display error in form
+        console.log(error.toString());
     }
 }

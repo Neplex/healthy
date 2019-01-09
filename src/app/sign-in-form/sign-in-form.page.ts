@@ -16,6 +16,7 @@ export class SignInFormPage implements OnDestroy {
 
     user: User;
     subscription: Subscription;
+    erreur: boolean;
 
     constructor(
         private navCtrl: NavController,
@@ -23,6 +24,7 @@ export class SignInFormPage implements OnDestroy {
         private api: HealthyApiService
     ) {
         this.user = new User();
+        this.erreur = false;
     }
 
     ngOnDestroy(): void {
@@ -43,13 +45,17 @@ export class SignInFormPage implements OnDestroy {
     }
 
     public onSuccessfulLogin() {
-        this.navCtrl.navigateRoot('map').then();
+        this.navCtrl.navigateRoot('/home/map').then();
         this.modalCtrl.dismiss().then();
     }
 
     public onFailedLogin(error) {
         console.error(error);
-        // TODO: display error in form
+        this.erreur = true;
+    }
+
+    public onError() {
+        return this.erreur;
     }
 
 }

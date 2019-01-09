@@ -9,6 +9,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {HealthyApiModule} from './healthy-api/healthy-api.module';
+import {Toast} from '@ionic-native/toast/ngx';
 
 @NgModule({
     declarations: [AppComponent],
@@ -22,6 +23,7 @@ import {HealthyApiModule} from './healthy-api/healthy-api.module';
     providers: [
         StatusBar,
         SplashScreen,
+        Toast,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
     bootstrap: [AppComponent]
