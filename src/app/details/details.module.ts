@@ -10,20 +10,20 @@ import {DetailsPage} from './details.page';
 import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
 
 const routes: Routes = [
-	{
-		path: '',
-		component: DetailsPage
-	}
+    {
+        path: '',
+        component: DetailsPage
+    }
 ];
 
 @NgModule({
-	imports: [
-		CommonModule,
-		FormsModule,
-		IonicModule,
-		RouterModule.forChild(routes)
-	],
-	declarations: [DetailsPage, StructureTypeToStrPipe]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes)
+    ],
+    declarations: [DetailsPage, StructureTypeToStrPipe]
 })
 export class DetailsPageModule {
 }
