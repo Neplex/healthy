@@ -6,6 +6,7 @@ import {IonicModule} from '@ionic/angular';
 import {MapPage} from './map.page';
 import {AddStructurePage} from '../add-structure/add-structure.page';
 import {HealthyApiModule} from '../healthy-api/healthy-api.module';
+import {DetailsPage} from '../details/details.page';
 
 const routes: Routes = [
     {
@@ -24,10 +25,12 @@ const routes: Routes = [
         RouterModule.forChild(routes),
     ],
     entryComponents: [
-        AddStructurePage
+        AddStructurePage,
+        DetailsPage
     ],
     declarations: [
         AddStructurePage,
+        DetailsPage,
         MapPage
     ]
 })

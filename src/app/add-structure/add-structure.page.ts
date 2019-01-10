@@ -83,7 +83,7 @@ export class AddStructurePage implements OnInit, OnDestroy {
                 structure = <MedicalOffice>formValue;
                 break;
             case StructureType.HOSPITAL:
-                structure = <Hospital>formValue;
+                structure = new Hospital(formValue.name, formValue.description, formValue.phone, formValue.emergency, formValue.maternity);
                 break;
             case StructureType.FITNESS_TRAIL:
                 structure = <FitnessTrail>formValue;

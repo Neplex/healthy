@@ -43,7 +43,7 @@ export class SignInFormPage implements OnDestroy {
     }
 
     public onSuccessfulLogin() {
-        this.navCtrl.navigateRoot('map').then();
+	    this.navCtrl.navigateRoot('/home/map').then();
         this.modalCtrl.dismiss().then();
     }
 

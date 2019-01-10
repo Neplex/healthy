@@ -30,6 +30,6 @@ export class SignInPage {
     }
 
     public goToMap() {
-        this.navCtrl.navigateRoot('map').then();
+	    this.navCtrl.navigateRoot('/home/map').then();
     }
 }

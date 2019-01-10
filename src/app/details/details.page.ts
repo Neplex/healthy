@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AnyStructure, HealthyApiService} from '../healthy-api/healthy-api.service';
-import {AlertController} from '@ionic/angular';
+import {AlertController, ModalController, NavParams} from '@ionic/angular';
 
 @Component({
     selector: 'app-details',
@@ -18,11 +18,11 @@ export class DetailsPage implements OnInit, OnDestroy {
     properties = [];
     isfav;
 
-    constructor(private api: HealthyApiService, private route: ActivatedRoute, private alert: AlertController) {
+    constructor(private api: HealthyApiService, private route: ActivatedRoute, private alert: AlertController, private modalCtrl: ModalController, private navParams: NavParams) {
     }
 
     ngOnInit() {
-        this.sub = this.route.paramMap.subscribe(params => this.id = params.get('id'));
+        this.id = this.navParams.get('id');
         this.subProp = this.api.getStructureById(+this.id).subscribe(params => {
             this.structure = params;
             this.properties = Object.getOwnPropertyNames(this.structure);
@@ -34,7 +34,6 @@ export class DetailsPage implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.sub.unsubscribe();
         this.subProp.unsubscribe();
     }
 
@@ -68,5 +67,9 @@ export class DetailsPage implements OnInit, OnDestroy {
                 del.unsubscribe();
             });
         }
+    }
+
+    public goBack() {
+        this.modalCtrl.dismiss().then();
     }
 }

@@ -1,6 +1,9 @@
 <ion-header>
     <ion-toolbar color="primary">
-        <ion-buttons slot="end">
+        <ion-buttons slot="start">
+            <ion-button (click)="goBack()" fill="clear" icon-start>
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
             <ion-button (click)="addFavorite()">
                 <ion-icon *ngIf="isfav" name="heart"></ion-icon>
                 <ion-icon *ngIf="!isfav" name="heart-outline"></ion-icon>
@@ -20,12 +23,9 @@
             </ion-col>
             <ion-col no-margin no-padding>
                 <ion-item>
-                    <ion-label text-center> {{structure[field]}} </ion-label>
+                    <ion-label text-center> {{structure[field]}}</ion-label>
                 </ion-item>
             </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>
-<ion-footer>
-    <ion-aler
-</ion-footer>

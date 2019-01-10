@@ -175,7 +175,7 @@ export class HealthyApiService implements OnDestroy {
         const geo = HealthyApiService.structureToFeature(structure);
         const options = this.getHttpOptions();
         let observable;
-
+	    console.log(structure.structure_type);
         if (structure.id) {
             observable = this.http.put(STRUCTURES_URL + '/' + structure.id, geo, options);
         } else {

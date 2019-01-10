@@ -7,7 +7,7 @@ import {IonicModule} from '@ionic/angular';
 
 import {DetailsPage} from './details.page';
 
-import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
+import {HealthyApiModule} from '../healthy-api/healthy-api.module';
 
 const routes: Routes = [
     {
@@ -20,10 +20,11 @@ const routes: Routes = [
     imports: [
         CommonModule,
         FormsModule,
+        HealthyApiModule,
         IonicModule,
         RouterModule.forChild(routes)
     ],
-    declarations: [DetailsPage, StructureTypeToStrPipe]
+    declarations: [DetailsPage]
 })
 export class DetailsPageModule {
 }
