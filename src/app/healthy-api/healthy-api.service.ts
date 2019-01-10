@@ -56,10 +56,20 @@ export class HealthyApiService implements OnDestroy {
             case StructureType.FITNESS_TRAIL:
                 structure = <FitnessTrail>properties;
                 break;
+
+            case StructureType.GYM:
+                structure = <Gym>properties;
+                break;
+
+            case StructureType.MEDICAL_OFFICE:
+                structure = <MedicalOffice>properties;
+                break;
         }
 
-        structure.lat = geometry.coordinates[0];
-        structure.lng = geometry.coordinates[1];
+        if (structure) {
+            structure.lat = geometry.coordinates[0];
+            structure.lng = geometry.coordinates[1];
+        }
 
         return structure;
     }
