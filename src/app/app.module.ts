@@ -8,6 +8,8 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
+import {HomePageModule} from './home/home.module';
+import {SignInPageModule} from './sign-in/sign-in.module';
 import {HealthyApiModule} from './healthy-api/healthy-api.module';
 
 @NgModule({
@@ -17,6 +19,8 @@ import {HealthyApiModule} from './healthy-api/healthy-api.module';
         BrowserModule,
         IonicModule.forRoot(),
         AppRoutingModule,
+        HomePageModule,
+        SignInPageModule,
         HealthyApiModule
     ],
     providers: [

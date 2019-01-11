@@ -12,11 +12,11 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import BaseLayer from 'ol/layer/Base';
-import {HealthyApiService} from '../healthy-api/healthy-api.service';
+import {HealthyApiService} from '../../healthy-api/healthy-api.service';
 import {Subscription} from 'rxjs';
 import {ModalController} from '@ionic/angular';
-import {AddStructurePage} from '../add-structure/add-structure.page';
-import {DetailsPage} from '../details/details.page';
+import {AddStructurePage} from './add-structure/add-structure.page';
+import {DetailsPage} from './details/details.page';
 
 @Component({
     selector: 'app-map',
@@ -33,16 +33,17 @@ export class MapPage implements OnInit, OnDestroy {
     positionFeature;
     userLayer: TileLayer;
     subS: Subscription;
-    idF;
-    coordinateFeature;
 
     constructor(private api: HealthyApiService, private modalCtrl: ModalController) {
     }
 
     ngOnInit() {
+
+
         this.views = new View({
-            center: [47.90289, 1.90389],
-            zoom: 17
+            center: [1.90, 47.19],
+            zoom: 17,
+            projection: 'EPSG:4326'
         });
 
         this.geolocation = new Geolocation({
@@ -74,9 +75,8 @@ export class MapPage implements OnInit, OnDestroy {
         });
 
         this.geolocation.on('change:position', () => {
-            let coordinates = this.geolocation.getPosition();
-            this.positionFeature.setGeometry(coordinates ?
-                new Point(coordinates) : null);
+            const coordinates = this.geolocation.getPosition();
+            this.positionFeature.setGeometry(coordinates ? new Point(coordinates) : null);
         });
 
         this.layersMap.push(new TileLayer({
@@ -85,57 +85,43 @@ export class MapPage implements OnInit, OnDestroy {
 
         this.layersMap.push(this.userLayer);
 
-        this.creaMap();
+        const sub = this.api.getAllStructuresAsGeoJSON().subscribe((data) => {
+            this.creaMap(data);
 
-        this.map = new Map({
-            target: 'map',
-            layers: this.layersMap,
-            view: this.views
-        });
-
-        let self = this;
-
-        this.map.on('click', (e) => {
-            let feature = self.map.forEachFeatureAtPixel(e.pixel,
-                function (feature) {
-                    return feature;
-                });
-            if (feature && feature != this.positionFeature) {
-                this.coordinateFeature = toLonLat(feature.getGeometry().getCoordinates());
-                this.subS = this.api.getAllStructures().subscribe(structures => {
-                    for (let s of structures) {
-                        if (this.coordinateFeature[0] == s.lng && this.coordinateFeature[1] == s.lat) {
-                            this.idF = s.id;
-                            this.modalCtrl.create({
-                                component: DetailsPage,
-                                componentProps: {
-                                    id: this.idF
-                                }
-                            }).then((modal) => {
-                                modal.present().then();
-                            });
-                            break;
-                        }
-                    }
-                });
-                console.log(this.idF);
-
-            }
-        });
-
-        this.map.on('dblclick', (e) => {
-            let coordinates = toLonLat(e.coordinate);
-            this.modalCtrl.create({
-                component: AddStructurePage,
-                componentProps: {coordinates: coordinates}
-            }).then((modal) => {
-                modal.present().then();
+            this.map = new Map({
+                target: 'map',
+                layers: this.layersMap,
+                view: this.views
             });
-        });
 
-        /*this.sub = this.api.getAllStructuresAsGeoJSON().subscribe(() => {
-            this.creaMap();
-        });*/
+            const self = this;
+            this.map.on('click', (e) => {
+                const feature = self.map.forEachFeatureAtPixel(e.pixel, (f) => f);
+                if (feature && feature !== this.positionFeature) {
+                    this.modalCtrl.create({
+                        component: DetailsPage,
+                        componentProps: {
+                            id: feature.values_.id
+                        }
+                    }).then((modal) => {
+                        modal.present().then();
+                    });
+
+                }
+            });
+
+            this.map.on('dblclick', (e) => {
+                const coordinates = toLonLat(e.coordinate);
+                this.modalCtrl.create({
+                    component: AddStructurePage,
+                    componentProps: {coordinates: coordinates}
+                }).then((modal) => {
+                    modal.present().then();
+                });
+            });
+
+            sub.unsubscribe();
+        });
     }
 
     ngOnDestroy(): void {
@@ -143,12 +129,10 @@ export class MapPage implements OnInit, OnDestroy {
         this.subS.unsubscribe();
     }
 
-    creaMap() {
+    creaMap(l) {
         this.layersMap.push(new VectorLayer({
             source: new VectorSource({
-                format: new GeoJSON,
-                url: 'https://healthy-api-dev.herokuapp.com/v1/structures'
-                //features: (new GeoJSON()).readFeatures(l)
+                features: (new GeoJSON()).readFeatures(l)
             }),
             style: new Style({
                 image: new CircleStyle({
@@ -168,4 +152,5 @@ export class MapPage implements OnInit, OnDestroy {
     centered(): void {
         this.map.getView().setCenter(this.geolocation.getPosition());
     }
+
 }

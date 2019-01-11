@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {AnyStructure, HealthyApiService} from '../healthy-api/healthy-api.service';
+import {AnyStructure, HealthyApiService} from '../../../healthy-api/healthy-api.service';
 import {AlertController, ModalController, NavParams} from '@ionic/angular';
 
 @Component({
@@ -16,9 +16,14 @@ export class DetailsPage implements OnInit, OnDestroy {
     subFav;
     structure;
     properties = [];
-    isfav;
+    public isfav = false;
 
-    constructor(private api: HealthyApiService, private route: ActivatedRoute, private alert: AlertController, private modalCtrl: ModalController, private navParams: NavParams) {
+    constructor(
+        private api: HealthyApiService, private route: ActivatedRoute,
+        private alert: AlertController, private modalCtrl: ModalController,
+        private navParams: NavParams
+    ) {
+        /*Empty contructor*/
     }
 
     ngOnInit() {

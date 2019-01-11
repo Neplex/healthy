@@ -75,11 +75,15 @@ export class HealthyApiService implements OnDestroy {
     }
 
     private static structureToFeature(structure: AnyStructure): object {
+        const coordinates = [structure.lng, structure.lat];
+        delete structure.lat;
+        delete structure.lng;
+
         return {
             type: 'Feature',
             geometry: {
                 type: 'Point',
-                coordinates: [structure.lat, structure.lng]
+                coordinates: coordinates
             },
             properties: <object>structure
         };
@@ -100,10 +104,11 @@ export class HealthyApiService implements OnDestroy {
     // AUTH //
 
     public signIn(username: string, password: string): Observable<void> {
+        const self = this;
         const signIn = this.http.post(LOGIN_URL, {'username': username, 'password': password}).pipe(
             take(1),
             map(payload => {
-                this.token = payload['token'];
+                self.token = payload['token'];
                 return;
             })
         );
@@ -116,10 +121,11 @@ export class HealthyApiService implements OnDestroy {
     }
 
     public signOut(): Observable<void> {
+        const self = this;
         return this.http.post(LOGOUT_URL, {}, this.getHttpOptions()).pipe(
             take(1),
             map(() => {
-                this.token = null;
+                self.token = null;
                 return;
             }));
     }
@@ -175,7 +181,7 @@ export class HealthyApiService implements OnDestroy {
         const geo = HealthyApiService.structureToFeature(structure);
         const options = this.getHttpOptions();
         let observable;
-	    console.log(structure.structure_type);
+
         if (structure.id) {
             observable = this.http.put(STRUCTURES_URL + '/' + structure.id, geo, options);
         } else {
@@ -342,12 +348,17 @@ export class HealthyApiService implements OnDestroy {
     private getHttpOptions(): { headers };
     private getHttpOptions(params: object): { headers, params };
     private getHttpOptions(params?: object) {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
+        let headers;
 
-        if (this.token !== null) {
-            headers.set('Authorization', this.token);
+        if (this.isSignedIn()) {
+            headers = new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': this.token
+            });
+        } else {
+            headers = new HttpHeaders({
+                'Content-Type': 'application/json'
+            });
         }
 
         return params ? {headers: headers, params: params} : {headers: headers};

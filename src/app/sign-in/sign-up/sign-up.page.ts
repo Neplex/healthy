@@ -4,8 +4,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {Subscription} from 'rxjs';
 
-import {HealthyApiService} from '../healthy-api/healthy-api.service';
-import {User} from '../healthy-api/class/user';
+import {HealthyApiService} from '../../healthy-api/healthy-api.service';
+import {User} from '../../healthy-api/class/user';
 
 @Component({
     selector: 'app-sign-up',

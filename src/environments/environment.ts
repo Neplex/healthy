@@ -6,7 +6,7 @@ export const environment = {
     production: false,
 
     // URL of production API
-	healthyApiUrl: 'https://healthy-api-dev.herokuapp.com'
+    healthyApiUrl: '/api'
 };
 
 /*

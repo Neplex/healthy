@@ -3,8 +3,8 @@ import {ModalController, NavController} from '@ionic/angular';
 
 import {Subscription} from 'rxjs';
 
-import {HealthyApiService} from '../healthy-api/healthy-api.service';
-import {User} from '../healthy-api/class/user';
+import {HealthyApiService} from '../../healthy-api/healthy-api.service';
+import {User} from '../../healthy-api/class/user';
 
 
 @Component({
@@ -43,7 +43,7 @@ export class SignInFormPage implements OnDestroy {
     }
 
     public onSuccessfulLogin() {
-	    this.navCtrl.navigateRoot('/home/map').then();
+        this.navCtrl.navigateRoot('/home/map').then();
         this.modalCtrl.dismiss().then();
     }
 

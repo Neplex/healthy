@@ -1,19 +1,19 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {StructureType} from '../healthy-api/class/structure-type.enum';
-import {HealthyApiService} from '../healthy-api/healthy-api.service';
-import {MedicalOffice} from '../healthy-api/class/medical-office';
-import {Hospital} from '../healthy-api/class/hospital';
-import {FitnessTrail} from '../healthy-api/class/fitness-trail';
-import {Gym} from '../healthy-api/class/gym';
+import {StructureType} from '../../../healthy-api/class/structure-type.enum';
+import {HealthyApiService} from '../../../healthy-api/healthy-api.service';
+import {MedicalOffice} from '../../../healthy-api/class/medical-office';
+import {Hospital} from '../../../healthy-api/class/hospital';
+import {FitnessTrail} from '../../../healthy-api/class/fitness-trail';
+import {Gym} from '../../../healthy-api/class/gym';
 import {ModalController, NavParams} from '@ionic/angular';
-
 
 @Component({
     selector: 'app-add-structure',
     templateUrl: './add-structure.page.html',
     styleUrls: ['./add-structure.page.scss'],
 })
+
 export class AddStructurePage implements OnInit, OnDestroy {
 
     structureForm: FormGroup;
@@ -28,6 +28,7 @@ export class AddStructurePage implements OnInit, OnDestroy {
     ) {
         this.initForm();
     }
+
 
     ngOnInit(): void {
     }
@@ -94,8 +95,8 @@ export class AddStructurePage implements OnInit, OnDestroy {
             default:
         }
         let coords = this.navParams.get('coordinates');
-        structure.lng = coords[0];
-        structure.lat = coords[1];
+        structure.lng = coords[1];
+        structure.lat = coords[0];
         this.sub = this.api.saveStructure(structure).subscribe(() => this.goBack());
     }
 
