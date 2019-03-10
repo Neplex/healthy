@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="secondary">
         <ion-buttons slot="start">
             <ion-button (click)="goBack()" fill="clear" icon-start>
                 <ion-icon name="close"></ion-icon>
@@ -11,20 +11,27 @@
 
 <ion-content padding>
     <ion-grid>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" #myform="ngForm">
             <ion-item>
                 <ion-label for="login">Username</ion-label>
                 <ion-input id="login" required formControlName="username" type="text"></ion-input>
             </ion-item>
+            <ion-note color="danger" *ngIf="form.get('username').hasError('required') && myform.submitted">Username is required</ion-note>
+            <ion-note color="danger" *ngIf="form.get('username').hasError('minlength') && !form.get('username').hasError('required') && myform.submitted">Username must be at least 6 characters</ion-note>
             <ion-item formGroupName="passwords">
                 <ion-label for="password">Password</ion-label>
                 <ion-input id="password" required formControlName="password" type="password"></ion-input>
             </ion-item>
+            <ion-note color="danger" *ngIf="form.get('passwords.password').hasError('required') && myform.submitted">Password is required</ion-note>
+            <ion-note color="danger" *ngIf="form.get('passwords.password').hasError('minlength') && !form.get('passwords.password').hasError('required') && myform.submitted">Password must be at least 6 characters</ion-note>
             <ion-item formGroupName="passwords">
                 <ion-label for="passwordCheck">Confirm password</ion-label>
                 <ion-input id="passwordCheck" required formControlName="passwordCheck" type="password"></ion-input>
             </ion-item>
-            <ion-button type="submit" expand="block">Inscription</ion-button>
+            <ion-note color="danger" *ngIf="form.get('passwords.passwordCheck').hasError('required') && myform.submitted">2nd password is required</ion-note>
+            <ion-note color="danger" *ngIf="form.get('passwords.passwordCheck').hasError('minlength') && !form.get('passwords.passwordCheck').hasError('required') && myform.submitted">2nd password must be at least 6 characters</ion-note>
+            <ion-note color="danger" *ngIf="form.get('passwords.extra')"></ion-note>
+            <ion-button type="submit" expand="block" color="secondary">Inscription</ion-button>
         </form>
     </ion-grid>
 </ion-content>
