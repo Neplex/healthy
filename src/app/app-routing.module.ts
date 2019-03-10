@@ -1,16 +1,32 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {HomePage} from './home/home.page';
+import {SignInPage} from './sign-in/sign-in.page';
+import {MapPage} from './home/map/map.page';
+import {FavoritesPage} from './home/favorites/favorites.page';
+import {SettingsPage} from './home/settings/settings.page';
 
 const routes: Routes = [
-    {path: '', redirectTo: 'home', pathMatch: 'full'},
-    {path: '', redirectTo: 'sign-in', pathMatch: 'full'},
-    {path: 'addStructure', loadChildren: './add-structure/add-structure.module#AddStructurePageModule'},
-    {path: 'favorites', loadChildren: './favorites/favorites.module#FavoritesPageModule'},
-    {path: 'sign-in', loadChildren: './sign-in/sign-in.module#SignInPageModule'},
-    {path: 'sign-up', loadChildren: './sign-up/sign-up.module#SignUpPageModule'},
-    {path: 'sign-in-form', loadChildren: './sign-in-form/sign-in-form.module#SignInFormPageModule'},
-    {path: 'map', loadChildren: './map/map.module#MapPageModule'},
-    {path: 'structure_details/:id', loadChildren: './details/details.module#DetailsPageModule'}
+    {
+        path: '', redirectTo: 'sign-in', pathMatch: 'full'
+    },
+    {
+        path: 'home', component: HomePage, children: [
+            {
+                path: 'map',
+                component: MapPage
+            }, {
+                path: 'favorites',
+                component: FavoritesPage
+            }, {
+                path: 'settings',
+                component: SettingsPage
+            }
+        ]
+    },
+    {
+        path: 'sign-in', component: SignInPage
+    }
 ];
 
 @NgModule({

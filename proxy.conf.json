@@ -1,0 +1,10 @@
+{
+  "/api": {
+    "target": "https://healthy-api-dev.herokuapp.com/v1",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true
+  }
+}

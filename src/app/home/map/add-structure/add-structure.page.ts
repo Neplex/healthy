@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {StructureType} from '../healthy-api/class/structure-type.enum';
-import {HealthyApiService} from '../healthy-api/healthy-api.service';
-import {MedicalOffice} from '../healthy-api/class/medical-office';
-import {Hospital} from '../healthy-api/class/hospital';
-import {FitnessTrail} from '../healthy-api/class/fitness-trail';
-import {Gym} from '../healthy-api/class/gym';
-import {NavController} from '@ionic/angular';
+import {StructureType} from '../../../healthy-api/class/structure-type.enum';
+import {HealthyApiService} from '../../../healthy-api/healthy-api.service';
+import {MedicalOffice} from '../../../healthy-api/class/medical-office';
+import {Hospital} from '../../../healthy-api/class/hospital';
+import {FitnessTrail} from '../../../healthy-api/class/fitness-trail';
+import {Gym} from '../../../healthy-api/class/gym';
+import {ModalController, NavParams} from '@ionic/angular';
 
 @Component({
     selector: 'app-add-structure',
@@ -16,16 +16,16 @@ import {NavController} from '@ionic/angular';
 
 export class AddStructurePage implements OnInit, OnDestroy {
 
-
     structureForm: FormGroup;
-
-    // Champs pour la création d'une structure
     sub;
     typeStructure: string;
     structureType = StructureType;
     structureTypeList = Object.values(StructureType);
 
-    constructor(private formBuilder: FormBuilder, private api: HealthyApiService, private nav: NavController) {
+    constructor(
+        private formBuilder: FormBuilder, private api: HealthyApiService,
+        private modalCtrl: ModalController, private navParams: NavParams
+    ) {
         this.initForm();
     }
 
@@ -34,7 +34,9 @@ export class AddStructurePage implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.sub.unsubscribe();
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
     }
 
     initForm() {
@@ -82,7 +84,7 @@ export class AddStructurePage implements OnInit, OnDestroy {
                 structure = <MedicalOffice>formValue;
                 break;
             case StructureType.HOSPITAL:
-                structure = <Hospital>formValue;
+                structure = new Hospital(formValue.name, formValue.description, formValue.phone, formValue.emergency, formValue.maternity);
                 break;
             case StructureType.FITNESS_TRAIL:
                 structure = <FitnessTrail>formValue;
@@ -92,6 +94,13 @@ export class AddStructurePage implements OnInit, OnDestroy {
                 break;
             default:
         }
-        this.sub = this.api.saveStructure(structure).subscribe(() => this.nav.navigateBack('/').then());
+        const coords = this.navParams.get('coordinates');
+        structure.lng = coords[1];
+        structure.lat = coords[0];
+        this.sub = this.api.saveStructure(structure).subscribe(() => this.goBack());
+    }
+
+    public goBack() {
+        this.modalCtrl.dismiss().then();
     }
 }

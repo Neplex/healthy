@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ModalController, NavController} from '@ionic/angular';
-import {SignUpPage} from '../sign-up/sign-up.page';
-import {SignInFormPage} from '../sign-in-form/sign-in-form.page';
+import {SignUpPage} from './sign-up/sign-up.page';
+import {SignInFormPage} from './sign-in-form/sign-in-form.page';
 
 @Component({
     selector: 'app-sign-in',
@@ -30,6 +30,6 @@ export class SignInPage {
     }
 
     public goToMap() {
-        this.navCtrl.navigateRoot('map').then();
+        this.navCtrl.navigateRoot('/home/map').then();
     }
 }

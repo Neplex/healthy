@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HealthyApiService} from '../healthy-api/healthy-api.service';
-import {Structure} from '../healthy-api/class/structure';
+import {HealthyApiService} from '../../healthy-api/healthy-api.service';
+import {Structure} from '../../healthy-api/class/structure';
 import {AlertController} from '@ionic/angular';
 import {Subscription} from 'rxjs';
 
