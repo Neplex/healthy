@@ -13,7 +13,7 @@
             <ion-item-sliding *ngFor="let structure of favorites">
                 <ion-item>
                     <ion-label>{{structure.name}}</ion-label>
-                    <ion-badge color="medium" slot="end">{{structure | structureTypeToStr}}</ion-badge>
+                    <ion-note color="medium" slot="end">{{structure | structureTypeToStr}}</ion-note>
                 </ion-item>
                 <ion-item-options side="start">
                     <ion-item-option color="danger" (click)="delete(structure).then()">

@@ -1,32 +1,29 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 
 import {IonicModule} from '@ionic/angular';
 
-import {AddStructurePage} from './add-structure.page';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {DetailsPage} from './details.page';
 
 import {StructureTypeToStrPipe} from '../structure-type-to-str.pipe';
 
 const routes: Routes = [
     {
         path: '',
-        component: AddStructurePage
+        component: DetailsPage
     }
 ];
 
 @NgModule({
     imports: [
         CommonModule,
-        IonicModule,
         FormsModule,
-        ReactiveFormsModule,
+        IonicModule,
         RouterModule.forChild(routes)
     ],
-    declarations: [AddStructurePage, StructureTypeToStrPipe]
+    declarations: [DetailsPage, StructureTypeToStrPipe]
 })
-export class AddStructurePageModule {
-
-
+export class DetailsPageModule {
 }
