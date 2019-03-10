@@ -94,7 +94,7 @@ export class AddStructurePage implements OnInit, OnDestroy {
                 break;
             default:
         }
-        let coords = this.navParams.get('coordinates');
+        const coords = this.navParams.get('coordinates');
         structure.lng = coords[1];
         structure.lat = coords[0];
         this.sub = this.api.saveStructure(structure).subscribe(() => this.goBack());
