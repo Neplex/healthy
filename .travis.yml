@@ -27,29 +27,29 @@ matrix:
           branch:     master
 
     # Android deploy to GitHub release
-    - language:       android
-      android:
-        components:
-          - build-tools-27.0.3
-          - android-22
-          - add-on
-          - extra
-        licenses:
-          - android-sdk-preview-license-52d11cd2
-          - android-sdk-license-.+
-          - google-gdk-license-.+
-      before_install:
-        - nvm install node
-      script:
-        - ionic cordova build android --prod --release
-        - echo "Ready to deploy"
-      deploy:
-        provider:     releases
-        api_key:
-          secure:     nKTgKdvI7SyTM5MpShEQcjLXzVCTbTH4stCbU6LHas0MAZoPV/gzjk3BIAO5MQffvOKfD6SNGVvq/wikxWNNNY3w67y/pVdexqbJOXuGVxCCEaPfXIPez2M34ub1tUAf/W5etMw+dvRAZAiiF1nxRuXnu4qUBZcOkI8Qzoia/Drs4CWHjnMCZDcraRnAQ2SIwzH3zFpzDMdR7rwxEK6Xa9NgInxaHxsLW/pfjaBUjVb1yxbvPz0GYmahpiNj42h62RUYhzzyEMcq9tQ6Zat8UbgNVf6A0uqYhamgXTVFMiwVjZVuWnkBrqRxpn52kyxXfV52Vz0qxpx2u0FDm59akggcvH7l65W9fQBV6PUL3FN1SBoH1EYzgEmRJrLO3qQt+/A38UhW6tIITttClHlyLT/x3L/ZWJUHPrJLMa1wyJRkWqYR4LZ/cakObUSlfPg/jpXhhdQXrkdZxQ2Q8clYsoKyi6mkRu39KGx+epHw5bHHi1tPVmviJgVCSOSMyLkIRO6wS2SixfdCl5JK/Td27w118A4lmQqf2OyxpypIH2JNFhfta9qgZgatjZhvAVc+C2GpFUNr262zQCSIW4OA8D6tn2FI/VkRYB69sue6+vaAHj/hR6PlXUK3w29AMZxBPAf0C2qLUU+2CY7QtKa0stUAxz1P4Ys0eD3ScnMApLs=
-        file:         healthy.apk
-        skip_cleanup: true
-        on:
-          tags:       true
-          branch:     master
-          repo:       Neplex/healthy
+#    - language:       android
+#      android:
+#        components:
+#          - build-tools-27.0.3
+#          - android-22
+#          - add-on
+#          - extra
+#        licenses:
+#          - android-sdk-preview-license-52d11cd2
+#          - android-sdk-license-.+
+#          - google-gdk-license-.+
+#      before_install:
+#        - nvm install node
+#      script:
+#        - ionic cordova build android --prod --release
+#        - echo "Ready to deploy"
+#      deploy:
+#        provider:     releases
+#        api_key:
+#          secure:     nKTgKdvI7SyTM5MpShEQcjLXzVCTbTH4stCbU6LHas0MAZoPV/gzjk3BIAO5MQffvOKfD6SNGVvq/wikxWNNNY3w67y/pVdexqbJOXuGVxCCEaPfXIPez2M34ub1tUAf/W5etMw+dvRAZAiiF1nxRuXnu4qUBZcOkI8Qzoia/Drs4CWHjnMCZDcraRnAQ2SIwzH3zFpzDMdR7rwxEK6Xa9NgInxaHxsLW/pfjaBUjVb1yxbvPz0GYmahpiNj42h62RUYhzzyEMcq9tQ6Zat8UbgNVf6A0uqYhamgXTVFMiwVjZVuWnkBrqRxpn52kyxXfV52Vz0qxpx2u0FDm59akggcvH7l65W9fQBV6PUL3FN1SBoH1EYzgEmRJrLO3qQt+/A38UhW6tIITttClHlyLT/x3L/ZWJUHPrJLMa1wyJRkWqYR4LZ/cakObUSlfPg/jpXhhdQXrkdZxQ2Q8clYsoKyi6mkRu39KGx+epHw5bHHi1tPVmviJgVCSOSMyLkIRO6wS2SixfdCl5JK/Td27w118A4lmQqf2OyxpypIH2JNFhfta9qgZgatjZhvAVc+C2GpFUNr262zQCSIW4OA8D6tn2FI/VkRYB69sue6+vaAHj/hR6PlXUK3w29AMZxBPAf0C2qLUU+2CY7QtKa0stUAxz1P4Ys0eD3ScnMApLs=
+#        file:         healthy.apk
+#        skip_cleanup: true
+#        on:
+#          tags:       true
+#          branch:     master
+#          repo:       Neplex/healthy
