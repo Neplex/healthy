@@ -1,0 +1,15 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title text-center>Map</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+    <ion-fab vertical="end" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="centered()">
+            <ion-icon name="body"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+    <div id="map" class="map"></div>
+</ion-content>
